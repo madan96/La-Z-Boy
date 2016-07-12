@@ -1,10 +1,10 @@
 # La-Z-Boy
------------------
+'''
 The end result of extreme boredom and the sufferings after watching some really low-rated movies on TV.
 This script is really helpful when you want to know the the Movies that are to be telecasted on TV 
 along with their `"Timing"` and `"IMDb Rating"`, so you never miss out a good watch right when you sit
 on your La-Z-Boy.
-
+'''
 This project is still under development.
 
 ### Usage
