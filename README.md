@@ -31,6 +31,16 @@ Movie: Dawn of the Planet of the Apes  Time: 21:00 - 23:45  Rating: 7.6
 And it's done! You have the name of the movie, timings and most importantly, the IMDb rating for the movie
 right in front of you on the Terminal.
 
+### Dependencies
+-----------------
+
+Install all the dependencies before using this scrapper.
+```
+pip install BeautifulSoup
+pip install mechanize
+````
+
+
 ### Features
 
 Currently supported:
