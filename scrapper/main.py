@@ -3,6 +3,7 @@ import re
 import urllib2
 from bs4 import BeautifulSoup
 from mechanize import Browser
+from tabulate import tabulate
 
 '''
    Currently supports:  #star-movies
@@ -57,10 +58,11 @@ def search_channel(channel):
 			ratings.append(str(rate.contents[0]))
 		else:
 			ratings.append("-")
-
+	headers = ['Movies','Time','Rating']
+	data_movies = []
  	for i in range(0,len(movie_name)):
- 		str1 = "Movie: " + str(movie_name[i]) + "  Time: " + str(time[i])+ "  Rating: " + ratings[i]
-		print(str1)
+		 data_movies.append([str(movie_name[i]),str(time[i]),ratings[i]])
+	print tabulate(data_movies,headers=headers)
 
 def main():
 	if(len(sys.argv)>2):
