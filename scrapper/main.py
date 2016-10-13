@@ -4,6 +4,7 @@ import urllib2
 from bs4 import BeautifulSoup
 from mechanize import Browser
 from tabulate import tabulate
+import fpdf
 
 '''
    Currently supports:  #star-movies
@@ -20,6 +21,17 @@ from tabulate import tabulate
 web_url = "http://tvinfo.in/"
 base_url = 'http://www.imdb.com/find?q='
 
+#Method to initialize pdf object
+def pdf_save(data_movies,headers):
+    pdf = fpdf.FPDF(format='letter')
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt="Tv Timings !",ln=1, align="C")
+    #pdf.cell(200, 10, str(tabulate(data_movies,headers)),0,1, align="l")
+    for data in data_movies:
+        str1 = "Movie: " + str(data[0]) + "  Time: " + str(data[1])+ "  Rating: " + str(data[2])
+        pdf.cell(200, 10, str1,0,1, align="l")
+    pdf.output('La-Z-Boy.pdf')
 
 def getBSoup(url):
     req = urllib2.urlopen(url)
@@ -66,6 +78,14 @@ def search_channel(channel):
         data_movies.append([str(movie_name[i]), str(time[i]), ratings[i]])
     print tabulate(data_movies, headers=headers)
 
+    #Saving to pdf
+    print("Want to save as pdf? Y/N")
+    choice = raw_input().lower()
+    if choice == 'y':
+        pdf_save(data_movies,headers)
+        print('Saved!')
+    else:
+        print('Bye!')
 
 def main():
     if(len(sys.argv) > 2):
