@@ -1,5 +1,7 @@
 # La-Z-Boy
 
+[![Join the chat at https://gitter.im/La-Z-Boy/Lobby](https://badges.gitter.im/La-Z-Boy/Lobby.svg)](https://gitter.im/La-Z-Boy/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The end result of extreme boredom and the sufferings after watching some really low-rated movies on TV.
 
 This script is really helpful when you want to know the the Movies that are to be telecasted on TV
