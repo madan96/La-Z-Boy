@@ -1,0 +1,4 @@
+BeautifulSoup
+mechanize
+tabulate
+fpdf
