@@ -12,12 +12,12 @@ This project is still under development.
 ### Dependencies
 -----------------
 
-Install all the dependencies before using this scrapper.
+Install all the dependencies using `pip install -r requirements.txt` before using the script.
 
-    pip install BeautifulSoup
-    pip install mechanize
-    pip install tabulate
-    pip install fpdf
+   * BeautifulSoup
+   * mechanize
+   * tabulate
+   * fpdf
 
 ### Usage
 -----------------
