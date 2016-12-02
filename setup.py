@@ -14,10 +14,7 @@ setup(
 
     # Packages
     packages=["La-Z-Boy"],
-
-    # Include additional files into the package
-    include_package_data=True,
-
+    
     license='MIT',
     url = 'https://github.com/madan96/La-Z-Boy',
     # license="LICENSE.txt",
@@ -45,7 +42,6 @@ setup(
         "BeautifulSoup",
         "mechanize",
         "fpdf",
-        "tabulate",
-        "urllib2"
+        "tabulate"
     ],
 )

@@ -34,6 +34,10 @@ def pdf_save(data_movies,headers):
     pdf.output('La-Z-Boy.pdf')
 
 def getBSoup(url):
+    print'''
+Processing...
+
+    '''
     req = urllib2.urlopen(url)
     soup = BeautifulSoup(req.read(), "lxml")
     return soup
@@ -79,19 +83,21 @@ def search_channel(channel):
     print tabulate(data_movies, headers=headers)
 
     #Saving to pdf
-    print("Want to save as pdf? Y/N")
+    print("\nWant to save as pdf? Y/N")
     choice = raw_input().lower()
     if choice == 'y':
         pdf_save(data_movies,headers)
-        print('Saved!')
+        print('\nSaved!')
     else:
-        print('Bye!')
+        print('\nBye!')
 
 def main():
-    if(len(sys.argv) > 2):
-        channel = str(sys.argv[1] + "-" + sys.argv[2])
-    else:
-        channel = str(sys.argv[1])
+    print'''
+                                                                        Welcome to La-Z-Boy
+                                                                    For the love of good content
+    '''
+    channel = raw_input("Enter name of the TV Channel: ")
+    channel = "-".join([item.strip() for item in channel.split(" ")])
     movie_rating = search_channel(channel)
 
 if __name__ == '__main__':
