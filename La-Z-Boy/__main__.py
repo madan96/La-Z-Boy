@@ -45,14 +45,15 @@ Processing...
     return soup
 
 
-def search_channel(channel,channel2):
-    channel_url = web_url + channel + ".html"
-    soup = getBSoup(channel_url)
+#def search_channel(channel,channel2):
+def search_channel(channel2):
+    #channel_url = web_url + channel + ".html"
+    #soup = getBSoup(channel_url)
     time = []
     ratings = []
     title_search = re.compile('/title/tt\d+')
 
-    movie_name = soup.find_all('p', {"class": "title2"})
+    #movie_name = soup.find_all('p', {"class": "title2"})
 
     channel2_url= web_url2 + channel2
     soup2 = getBSoup(channel2_url)
@@ -60,17 +61,18 @@ def search_channel(channel,channel2):
     for s in soup2.find_all("strong"):
         if s.string:
             s.string.replace_with(s.string.strip())
-
+    movie_name=[]
     movie_name2 = soup2.find_all("strong")
 
     for i in range(0,len(movie_name2)):
         movie_name2[i]=movie_name2[i].text
 
-    for i in range(0, len(movie_name)):
-        movie_name[i] = movie_name[i].text
+    #for i in range(0, len(movie_name)):
+    #    movie_name[i] = movie_name[i].text
+
     #print movie_name
 
-    time1 = soup.find_all('div', {"class": "col-lg-12"})
+    #time1 = soup.find_all('div', {"class": "col-lg-12"})
 
     for s in soup2.find_all('b',{"class":"from"}):
         if s.string:
@@ -89,14 +91,14 @@ def search_channel(channel,channel2):
     for i in range(0,len(time2_to)):
         time2_to[i]=time2_to[i].text
 
-    for i in range(1, len(time1)-1, 2):
-        time.append(time1[i].text[0:13].strip(''))
-    time = [x for x in time if x != '']
+    #for i in range(1, len(time1)-1, 2):
+    #    time.append(time1[i].text[0:13].strip(''))
+
+    #time = [x for x in time if x != '']
 
     for i in range(0,len(movie_name2)):
-        if(movie_name2[i] not in movie_name):
-            movie_name.append(movie_name2[i])
-            time.append(time2_from[i]+"-"+time2_to[i])
+        movie_name.append(movie_name2[i])
+        time.append(time2_from[i]+"-"+time2_to[i])
 
     # time = filter(None, time)
 
@@ -136,16 +138,16 @@ def main():
                                                                         Welcome to La-Z-Boy
                                                                     For the love of good content
     '''
-    channel = raw_input("Enter name of the TV Channel: ")
-    channel2 =""+channel
-    channel = "-".join([item.strip() for item in channel.split(" ")])
+    #channel = raw_input("Enter name of the TV Channel: ")
+    channel2 = raw_input("Enter name of the TV Channel: ")
+    #channel = "-".join([item.strip() for item in channel.split(" ")])
     if(len(channel2.split())>1):
         channel2 = "-".join([item.strip() for item in channel2.split(" ")])
         channel2 = channel2.title()
     else:
         channel2 = channel2.strip()
         channel2 = channel2.upper()
-    movie_rating = search_channel(channel,channel2)
+    movie_rating = search_channel(channel2)
 
 if __name__ == '__main__':
     main()
