@@ -1,0 +1,15 @@
+Metadata-Version: 1.1
+Name: La-Z-Boy
+Version: 1.0.0
+Summary: Movie and Entertainment Rating System And Recommender
+Home-page: https://github.com/madan96/La-Z-Boy
+Author: Rishabh Madan
+Author-email: rishabhm@iitkgp.ac.in
+License: MIT
+Description: UNKNOWN
+Keywords: movie,recommender,ml,development,Python,IMDb,Entertainment
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2.7
