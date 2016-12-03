@@ -62,20 +62,24 @@ def search_channel(channel):
     time = [x for x in time if x != '']
 
     for i in range(0, len(movie_name)):
-        movie_search = '+'.join(movie_name[i].split())
-        movie_url = base_url + movie_search + '&s=all'
-        br = Browser()
-        br.open(movie_url)
-        link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
-        res = br.follow_link(link)
+        try :
+            movie_search = '+'.join(movie_name[i].split())
+            movie_url = base_url + movie_search + '&s=all'
+            br = Browser()
+            br.open(movie_url)
+            link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
+            res = br.follow_link(link)
 
-        soup = BeautifulSoup(res.read(), "lxml")
-        movie_title = soup.find('title').contents[0]
-        rate = soup.find('span', itemprop='ratingValue')
-        if rate is not None:
-            ratings.append(str(rate.contents[0]))
-        else:
+            soup = BeautifulSoup(res.read(), "lxml")
+            movie_title = soup.find('title').contents[0]
+            rate = soup.find('span', itemprop='ratingValue')
+            if rate is not None:
+                ratings.append(str(rate.contents[0]))
+            else:
+                ratings.append("-")
+        except :
             ratings.append("-")
+
     headers = ['Movies', 'Time', 'Rating']
     data_movies = []
     for i in range(0, len(movie_name)):
