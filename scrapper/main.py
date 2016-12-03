@@ -94,7 +94,6 @@ def search_channel(channel,channel2):
             movie_name.append(movie_name2[i])
             time.append(time2_from[i]+"-"+time2_to[i])
 
-    #print time
     # time = filter(None, time)
 
     for i in range(0, len(movie_name)):
