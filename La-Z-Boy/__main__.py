@@ -107,25 +107,28 @@ def search_channel(channel2):
     # time = filter(None, time)
 
     for i in range(0, len(movie_name)):
-        print "Checking IMDb rating of "+ movie_name[i]
-        movie_search = '+'.join(movie_name[i].split())
-        movie_url = base_url + movie_search + '&s=all'
-        #print movie_url
-        br = Browser()
-        #print "check1"
-        br.open(movie_url)
-        #print "check2"
-        link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
-        res = br.follow_link(link)
-        #print "check3"
-        soup = BeautifulSoup(res.read(), "lxml")
-        #print "check4"
-        movie_title = soup.find('title').contents[0]
-        #print "check5"
-        rate = soup.find('span', itemprop='ratingValue')
-        if rate is not None:
-            ratings.append(str(rate.contents[0]))
-        else:
+        try:
+            print "Checking IMDb rating of "+ movie_name[i]
+            movie_search = '+'.join(movie_name[i].split())
+            movie_url = base_url + movie_search + '&s=all'
+            #print movie_url
+            br = Browser()
+            #print "check1"
+            br.open(movie_url)
+            #print "check2"
+            link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
+            res = br.follow_link(link)
+            #print "check3"
+            soup = BeautifulSoup(res.read(), "lxml")
+            #print "check4"
+            movie_title = soup.find('title').contents[0]
+            #print "check5"
+            rate = soup.find('span', itemprop='ratingValue')
+            if rate is not None:
+                ratings.append(str(rate.contents[0]))
+            else:
+                ratings.append("-")
+        except:
             ratings.append("-")
     headers = ['Movies', 'Time', 'Rating']
     data_movies = []
