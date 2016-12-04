@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import re
 import urllib2
@@ -43,7 +44,6 @@ Processing...
     req = urllib2.urlopen(url)
     soup = BeautifulSoup(req.read(), "lxml")
     return soup
-
 
 #def search_channel(channel,channel2):
 def search_channel(channel2):
@@ -98,20 +98,30 @@ def search_channel(channel2):
 
     for i in range(0,len(movie_name2)):
         movie_name.append(movie_name2[i])
+        movie_name[i]=movie_name[i].encode('utf-8')
+        movie_name[i]=movie_name[i].encode('ascii','ignore').strip()
         time.append(time2_from[i]+"-"+time2_to[i])
+
+    #print movie_name
 
     # time = filter(None, time)
 
     for i in range(0, len(movie_name)):
+        print "Checking IMDb rating of "+ movie_name[i]
         movie_search = '+'.join(movie_name[i].split())
         movie_url = base_url + movie_search + '&s=all'
+        #print movie_url
         br = Browser()
+        #print "check1"
         br.open(movie_url)
+        #print "check2"
         link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
         res = br.follow_link(link)
-
+        #print "check3"
         soup = BeautifulSoup(res.read(), "lxml")
+        #print "check4"
         movie_title = soup.find('title').contents[0]
+        #print "check5"
         rate = soup.find('span', itemprop='ratingValue')
         if rate is not None:
             ratings.append(str(rate.contents[0]))
