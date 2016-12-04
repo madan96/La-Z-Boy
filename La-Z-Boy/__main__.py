@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sys
 import re
 import urllib2
@@ -5,6 +6,7 @@ from bs4 import BeautifulSoup
 from mechanize import Browser
 from tabulate import tabulate
 import fpdf
+import string
 
 '''
    Currently supports:  #star-movies
@@ -19,6 +21,7 @@ import fpdf
 '''
 
 web_url = "http://tvinfo.in/"
+web_url2= "http://tvscheduleindia.com/channel/"
 base_url = 'http://www.imdb.com/find?q='
 
 #Method to initialize pdf object
@@ -42,35 +45,83 @@ Processing...
     soup = BeautifulSoup(req.read(), "lxml")
     return soup
 
-
-def search_channel(channel):
-    channel_url = web_url + channel + ".html"
-    soup = getBSoup(channel_url)
+#def search_channel(channel,channel2):
+def search_channel(channel2):
+    #channel_url = web_url + channel + ".html"
+    #soup = getBSoup(channel_url)
     time = []
     ratings = []
     title_search = re.compile('/title/tt\d+')
 
-    movie_name = soup.find_all('p', {"class": "title2"})
-    for i in range(0, len(movie_name)):
-        movie_name[i] = movie_name[i].text
+    #movie_name = soup.find_all('p', {"class": "title2"})
 
-    time1 = soup.find_all('div', {"class": "col-lg-12"})
-    for i in range(1, len(time1)-1, 2):
-        time.append(time1[i].text[0:13].strip(''))
+    channel2_url= web_url2 + channel2
+    soup2 = getBSoup(channel2_url)
+
+    for s in soup2.find_all("strong"):
+        if s.string:
+            s.string.replace_with(s.string.strip())
+    movie_name=[]
+    movie_name2 = soup2.find_all("strong")
+
+    for i in range(0,len(movie_name2)):
+        movie_name2[i]=movie_name2[i].text
+
+    #for i in range(0, len(movie_name)):
+    #    movie_name[i] = movie_name[i].text
+
+    #print movie_name
+
+    #time1 = soup.find_all('div', {"class": "col-lg-12"})
+
+    for s in soup2.find_all('b',{"class":"from"}):
+        if s.string:
+            s.string.replace_with(s.string.strip())
+
+    for s in soup2.find_all('b',{"class":"to"}):
+        if s.string:
+            s.string.replace_with(s.string.strip())
+
+    time2_from = soup2.find_all('b',{"class":"from"})
+    time2_to = soup2.find_all('b',{"class":"to"})
+    
+    for i in range(0,len(time2_from)):
+        time2_from[i]=time2_from[i].text
+
+    for i in range(0,len(time2_to)):
+        time2_to[i]=time2_to[i].text
+
+    #for i in range(1, len(time1)-1, 2):
+    #    time.append(time1[i].text[0:13].strip(''))
+
+    #time = [x for x in time if x != '']
+
+    for i in range(0,len(movie_name2)):
+        movie_name.append(movie_name2[i])
+        movie_name[i]=movie_name[i].encode('utf-8')
+        movie_name[i]=movie_name[i].encode('ascii','ignore').strip()
+        time.append(time2_from[i]+"-"+time2_to[i])
+
+    #print movie_name
 
     # time = filter(None, time)
-    time = [x for x in time if x != '']
 
     for i in range(0, len(movie_name)):
+        print "Checking IMDb rating of "+ movie_name[i]
         movie_search = '+'.join(movie_name[i].split())
         movie_url = base_url + movie_search + '&s=all'
+        #print movie_url
         br = Browser()
+        #print "check1"
         br.open(movie_url)
+        #print "check2"
         link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
         res = br.follow_link(link)
-
+        #print "check3"
         soup = BeautifulSoup(res.read(), "lxml")
+        #print "check4"
         movie_title = soup.find('title').contents[0]
+        #print "check5"
         rate = soup.find('span', itemprop='ratingValue')
         if rate is not None:
             ratings.append(str(rate.contents[0]))
@@ -92,13 +143,21 @@ def search_channel(channel):
         print('\nBye!')
 
 def main():
+
     print'''
                                                                         Welcome to La-Z-Boy
                                                                     For the love of good content
     '''
-    channel = raw_input("Enter name of the TV Channel: ")
-    channel = "-".join([item.strip() for item in channel.split(" ")])
-    movie_rating = search_channel(channel)
+    #channel = raw_input("Enter name of the TV Channel: ")
+    channel2 = raw_input("Enter name of the TV Channel: ")
+    #channel = "-".join([item.strip() for item in channel.split(" ")])
+    if(len(channel2.split())>1):
+        channel2 = "-".join([item.strip() for item in channel2.split(" ")])
+        channel2 = channel2.title()
+    else:
+        channel2 = channel2.strip()
+        channel2 = channel2.upper()
+    movie_rating = search_channel(channel2)
 
 if __name__ == '__main__':
     main()
