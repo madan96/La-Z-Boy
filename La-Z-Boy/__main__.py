@@ -91,16 +91,35 @@ def search_channel(channel2):
     for i in range(0,len(time2_to)):
         time2_to[i]=time2_to[i].text
 
+    checkList=[]                                                # soup2 has the code for page1. Not all the movies on page one are shown today!
+    for table_row in soup2.find_all('tr'):
+        # table_row=BeautifulSoup(table_row)
+        day = table_row.find_all('span', {'class': 'date'})
+        if (len(day) > 0):
+            day = str(day[0].string).replace(" ", "")
+            day = day.replace("\n", "")                         # If day = Today then only we should print the movie.
+            if (day == "Today"):
+                checkList.append(True)
+            else:
+                checkList.append(False)
+
+    #print(movie_name2)
+    #print(time2_from)
+    #print (time2_to)
+    #print(checkList)
+
+
     #for i in range(1, len(time1)-1, 2):
     #    time.append(time1[i].text[0:13].strip(''))
 
     #time = [x for x in time if x != '']
 
     for i in range(0,len(movie_name2)):
-        movie_name.append(movie_name2[i])
-        movie_name[i]=movie_name[i].encode('utf-8')
-        movie_name[i]=movie_name[i].encode('ascii','ignore').strip()
-        time.append(time2_from[i]+"-"+time2_to[i])
+        if(checkList[i]):
+            movie_name.append(movie_name2[i])
+            movie_name[i]=movie_name[i].encode('utf-8')
+            movie_name[i]=movie_name[i].encode('ascii','ignore').strip()
+            time.append(time2_from[i]+"-"+time2_to[i])
 
     #print movie_name
 
