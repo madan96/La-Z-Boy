@@ -205,7 +205,7 @@ def genre_recommend(genre):
     genre=genre.lower()
     soup3=getBSoup(web_url3)
     soup4=soup3.find('div',{'class' : 'massn' })
-    for row in islice(soup4.findAll('a'),10):                          # This decides how many channels to see (here 10)
+    for row in islice(soup4.findAll('a'),50):                          # This decides how many channels to see (here 50) .set 10 for quick response
         #print row.find('span').text
         #print ('Searching in  :'+web_url3 + row.get('href'))
         print 'Searching in  :' + row.find('span').text.replace('\n','')
