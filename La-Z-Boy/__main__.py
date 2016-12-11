@@ -7,6 +7,7 @@ from mechanize import Browser
 from tabulate import tabulate
 import fpdf
 import string
+from itertools import islice
 
 '''
    Currently supports:  #star-movies
@@ -22,7 +23,38 @@ import string
 
 web_url = "http://tvinfo.in/"
 web_url2= "http://tvscheduleindia.com/channel/"
+web_url3="http://tvscheduleindia.com"
 base_url = 'http://www.imdb.com/find?q='
+
+
+class Movie_entry:
+    movie_name =''
+    movie_start=''
+    movie_end=''
+    movie_rating=0
+
+    def get_rating(self ):
+        try:
+            print "Checking IMDb rating of "+ self.movie_name
+            movie_search = '+'.join(self.movie_name.split())
+            movie_url = base_url + movie_search + '&s=all'
+            print(movie_url)
+            br = Browser()
+            br.open(movie_url)
+            link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
+            res = br.follow_link(link)
+            soup = BeautifulSoup(res.read(), "lxml")
+            movie_title = soup.find('title').contents[0]
+            rate = soup.find('span', itemprop='ratingValue')
+            if rate is not None:
+                self.movie_rating=rate
+
+        except:
+            self.movie_rating='-'
+
+movies_of_my_genre=[]
+
+
 
 #Method to initialize pdf object
 def pdf_save(data_movies,headers):
@@ -41,6 +73,11 @@ def getBSoup(url):
 Processing...
 
     '''
+    req = urllib2.urlopen(url)
+    soup = BeautifulSoup(req.read(), "lxml")
+    return soup
+
+def getBSoup2(url):
     req = urllib2.urlopen(url)
     soup = BeautifulSoup(req.read(), "lxml")
     return soup
@@ -164,22 +201,100 @@ def search_channel(channel2):
     else:
         print('\nBye!')
 
+def genre_recommend(genre):
+    genre=genre.lower()
+    soup3=getBSoup(web_url3)
+    soup4=soup3.find('div',{'class' : 'massn' })
+    for row in islice(soup4.findAll('a'),10):                          # This decides how many channels to see (here 10)
+        #print row.find('span').text
+        #print ('Searching in  :'+web_url3 + row.get('href'))
+        print 'Searching in  :' + row.find('span').text.replace('\n','')
+        soup5=getBSoup2(web_url3 + row.get('href'))
+        soup5=soup5.find('div',{'class': 'resultCont'})
+        soup5 = soup5.findAll('tr')
+        soup5=soup5[:-1]
+        for link in soup5:                                           # link contains code of <tr>
+            if(link.find('b',{'class':'genre'})):
+                mov_gen=link.find('b',{'class':'genre'}).string.lower()
+                mov_gen = re.sub('[' + string.punctuation + ']', ' ', mov_gen)
+                mov_gen=mov_gen.split( )
+                if genre in mov_gen:
+                    date=link.find('span',{'class':'date'}).string.replace(" ", "").replace("\n", "")
+                    if (date == "Today"):
+                        new_movie=Movie_entry()
+                        new_movie.movie_name=link.find('strong').string.replace("\n", "")
+                        #print new_movie.movie_name
+                        new_movie.movie_start=link.find('b',{'class':'from'}).string
+                        new_movie.movie_end=link.find('b',{'class':'to'}).string
+                        movies_of_my_genre.append(new_movie)
+
+def get_ratings(movies_of_my_genre):
+    for movie in movies_of_my_genre:
+        try:
+            print "Checking IMDb rating of :   " + movie.movie_name.replace('\t','')
+            movie_search = '+'.join(movie.movie_name.split())
+            movie_url = base_url + movie_search + '&s=all'
+            #print movie_url
+            br = Browser()
+            #print "check1"
+            br.open(movie_url)
+            #print "check2"
+            link = br.find_link(url_regex=re.compile(r'/title/tt.*'))
+            res = br.follow_link(link)
+            #print "check3"
+            soup = BeautifulSoup(res.read(), "lxml")
+            #print "check4"
+            movie_title = soup.find('title').contents[0]
+            #print "check5"
+            rate = soup.find('span', itemprop='ratingValue')
+            if rate is not None:
+                movie.movie_rating=float(rate.contents[0])
+            else:
+                movie.movie_rating=0
+        except:
+            movie.movie_rating = 0
+
 def main():
 
     print'''
                                                                         Welcome to La-Z-Boy
                                                                     For the love of good content
     '''
-    #channel = raw_input("Enter name of the TV Channel: ")
-    channel2 = raw_input("Enter name of the TV Channel: ")
-    #channel = "-".join([item.strip() for item in channel.split(" ")])
-    if(len(channel2.split())>1):
-        channel2 = "-".join([item.strip() for item in channel2.split(" ")])
-        channel2 = channel2.title()
-    else:
-        channel2 = channel2.strip()
-        channel2 = channel2.upper()
-    movie_rating = search_channel(channel2)
+    print("If you want to check mmovies movies on a channel select 1")
+    print("To get movies of a specific Genre select 2")
+    choice=raw_input("Enter choice: ")
 
+    if(str(choice)=='1'):
+        #channel = raw_input("Enter name of the TV Channel: ")
+        channel2 = raw_input("Enter name of the TV Channel: ")
+        #channel = "-".join([item.strip() for item in channel.split(" ")])
+        if(len(channel2.split())>1):
+            channel2 = "-".join([item.strip() for item in channel2.split(" ")])
+            channel2 = channel2.title()
+        else:
+            channel2 = channel2.strip()
+            channel2 = channel2.upper()
+        movie_rating = search_channel(channel2)
+    else:
+        genre = raw_input("Enter Genre: (like  comedy, action ....) ")
+        genre_recommend(genre)
+        print '\nNumber of movies of genre ' + genre.upper()+' found : ' + str(len(movies_of_my_genre))
+        get_ratings(movies_of_my_genre)
+        sorted_list = sorted(movies_of_my_genre, key=lambda movie: movie.movie_rating, reverse=True)
+
+        headers = ['Movies', 'Time', 'Rating']
+        data_movies2 = []
+
+        for movie in islice(sorted_list, 5):
+            data_movies2.append([movie.movie_name.replace('\t', ''), movie.movie_start+"-"+movie.movie_end, movie.movie_rating])
+        print tabulate(data_movies2, headers=headers)
+
+'''
+        print("\nWant to save as pdf? Y/N")
+        choice = raw_input().lower()
+        if choice == 'y':
+            pdf_save(data_movies2, headers)
+            print('Saved!')
+'''
 if __name__ == '__main__':
     main()
