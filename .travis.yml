@@ -1,0 +1,13 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  # PyPy versions
+  - "pypy"
+# command to install dependencies
+install:
+  - pip install .
+  - pip install -r requirements.txt
+script: __main__.py
+# uncomment and edit the following line if your project needs to run something other than `rake`:
+# script: bundle exec rspec spec
