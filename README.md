@@ -10,6 +10,7 @@ on your La-Z-Boy.
 
 This project is still under development.
 
+Check demo version at [Heroku App](https://protected-cove-85139.herokuapp.com/)
 
 ### Dependencies
 -----------------
