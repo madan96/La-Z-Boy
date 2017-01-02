@@ -10,7 +10,7 @@ on your La-Z-Boy.
 
 This project is still under development.
 
-Check demo version at [Heroku App](https://protected-cove-85139.herokuapp.com/)
+Check demo version at [Heroku App](https://protected-cove-85139.herokuapp.com/) (Use channels like Movies-Now, Star-Movies, etc.)
 
 ### Dependencies
 -----------------
