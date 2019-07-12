@@ -15,6 +15,8 @@ Check web-app version at [Heroku App](https://la-z-b0y.herokuapp.com/) (Use chan
 pip install lazboy
 ```
 
+![La-Z-Boy Web](content/featured.gif)
+
 ### Contribute
 
 Have any suggestions? Please feel free to report as issues/pull requests.
