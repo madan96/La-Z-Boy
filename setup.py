@@ -2,18 +2,18 @@ from setuptools import setup
 
 setup(
     # Application name:
-    name="La-Z-Boy",
+    name="lazboy",
     # Keywords
     keywords=['movie', 'recommender', 'ml', 'development', 'Python', 'IMDb', 'Entertainment'],
     # Version number (initial):
-    version='1.0.0',
+    version='1.0.2',
 
     # Application author details:
     author="Rishabh Madan",
     author_email="rishabhm@iitkgp.ac.in",
 
     # Packages
-    packages=["La-Z-Boy"],
+    packages=["lazboy"],
     
     license='MIT',
     url = 'https://github.com/madan96/La-Z-Boy',

@@ -98,6 +98,7 @@ class MovieEntry:
         data_movies = []
         for i in range(0, len(self.movie_names)):
             data_movies.append([str(self.movie_names[i]), str(self.time[i]), self.ratings[i]])
+        print ('\n')
         print tabulate(data_movies, headers=headers)
 
         # Saving to pdf
@@ -111,10 +112,8 @@ class MovieEntry:
 
 def main():
 
-    print'''
-                                                                        Welcome to La-Z-Boy
-                                                                    For the love of good content
-    '''
+    head = "\n\n   Welcome to La-Z-Boy\nFor the love of good content\n\n"
+    print (head)
 
     movie_entries = MovieEntry()
 
