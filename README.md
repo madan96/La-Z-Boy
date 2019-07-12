@@ -7,7 +7,7 @@ along with their `"Timing"` and `"IMDb Rating"`, so you never miss out a good wa
 on your La-Z-Boy.
 
 
-Check web-app version at [Heroku App](https://protected-cove-85139.herokuapp.com/) (Use channels like star movies, movies now, etc.)
+Check web-app version at [Heroku App](https://la-z-b0y.herokuapp.com/) (Use channels like star movies, movies now, etc.)
 
 ### Installation
 
